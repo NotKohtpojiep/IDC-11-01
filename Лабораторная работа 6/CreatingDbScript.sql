@@ -1,95 +1,95 @@
-if not exists (select * from sys.databases where name = 'Библиотека')
+п»їif not exists (select * from sys.databases where name = 'Р‘РёР±Р»РёРѕС‚РµРєР°')
 Begin
-	CREATE DATABASE [Библиотека]
+	CREATE DATABASE [Р‘РёР±Р»РёРѕС‚РµРєР°]
 	ON PRIMARY
 	(
 	NAME=lib1,
-	FILENAME='PATH\Лабораторная работа 6\lib1.mdf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 6\lib1.mdf',
 	SIZE=100 MB,
 	MAXSIZE=UNLIMITED, FILEGROWTH=100%
 	),
 	(
 	NAME=lib2,
-	FILENAME='PATH\Лабораторная работа 6\lib2.mdf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 6\lib2.mdf',
 	SIZE=100 MB,
 	MAXSIZE=UNLIMITED, FILEGROWTH=100%
 	)
 	LOG ON
 	(
 	NAME=lib_log,
-	FILENAME='PATH\Лабораторная работа 6\lib_log.ldf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 6\lib_log.ldf',
 	SIZE=50 MB,
 	MAXSIZE=400 MB, FILEGROWTH=50 MB
 	)
 End
 
-USE [Библиотека]
+USE [Р‘РёР±Р»РёРѕС‚РµРєР°]
 Begin
-	CREATE TABLE [Заказ_наряд]
+	CREATE TABLE [Р—Р°РєР°Р·_РЅР°СЂСЏРґ]
 	(
-	Номер_заказа int primary key,
-	Дата_оформления date NOT NULL,
-	Дата_выполнения date NULL,
-	Полная_стоимость decimal(12,2)
+	РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° int primary key,
+	Р”Р°С‚Р°_РѕС„РѕСЂРјР»РµРЅРёСЏ date NOT NULL,
+	Р”Р°С‚Р°_РІС‹РїРѕР»РЅРµРЅРёСЏ date NULL,
+	РџРѕР»РЅР°СЏ_СЃС‚РѕРёРјРѕСЃС‚СЊ decimal(12,2)
 	);
-	CREATE TABLE [Работа]
+	CREATE TABLE [Р Р°Р±РѕС‚Р°]
 	(
-	Код_работы int primary key,
-	Наименование nvarchar(65) not null,
-	Стоимость_работы decimal(9,2) not null
-	);
-
-	CREATE TABLE [Содержимое_заказа]
-	(
-	Номер_заказа int not null,
-	Код_работы int not null,
-	CONSTRAINT PK_Rabota PRIMARY KEY (Номер_заказа, Код_работы)
+	РљРѕРґ_СЂР°Р±РѕС‚С‹ int primary key,
+	РќР°РёРјРµРЅРѕРІР°РЅРёРµ nvarchar(65) not null,
+	РЎС‚РѕРёРјРѕСЃС‚СЊ_СЂР°Р±РѕС‚С‹ decimal(9,2) not null
 	);
 
-	CREATE TABLE [Исполнитель]
+	CREATE TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
 	(
-	Код_исполнителя int primary key,
-	Фамилия varchar(40) not null,
-	Имя varchar(40) not null,
-	Отчество varchar(40) not null,
-	Специальность varchar(40) not null,
-	Возраст int not null,
-	Телефон bigint not null,
-	Дата_приема_на_работу date not null,
-	Зарплата decimal(12,2) not null
+	РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° int not null,
+	РљРѕРґ_СЂР°Р±РѕС‚С‹ int not null,
+	CONSTRAINT PK_Rabota PRIMARY KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_СЂР°Р±РѕС‚С‹)
 	);
 
-	CREATE TABLE [Выполнение_работ]
+	CREATE TABLE [РСЃРїРѕР»РЅРёС‚РµР»СЊ]
 	(
-	Номер_заказа int not null,
-	Код_работы int not null,
-	Код_исполнителя int not null,
-	Отметка_о_выполнении varchar(45) not null,
-	CONSTRAINT PK_VipolnenieRabot PRIMARY KEY (Номер_заказа, Код_работы, Код_исполнителя)
+	РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ int primary key,
+	Р¤Р°РјРёР»РёСЏ varchar(40) not null,
+	РРјСЏ varchar(40) not null,
+	РћС‚С‡РµСЃС‚РІРѕ varchar(40) not null,
+	РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ varchar(40) not null,
+	Р’РѕР·СЂР°СЃС‚ int not null,
+	РўРµР»РµС„РѕРЅ bigint not null,
+	Р”Р°С‚Р°_РїСЂРёРµРјР°_РЅР°_СЂР°Р±РѕС‚Сѓ date not null,
+	Р—Р°СЂРїР»Р°С‚Р° decimal(12,2) not null
 	);
 
-	-- Создание внешних ключей для таблиц
-	ALTER TABLE [Содержимое_заказа]
-	 ADD CONSTRAINT FK_SodZak_Zakaz FOREIGN KEY (Номер_заказа) 
-	 REFERENCES [Заказ_наряд] (Номер_заказа)
+	CREATE TABLE [Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚]
+	(
+	РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° int not null,
+	РљРѕРґ_СЂР°Р±РѕС‚С‹ int not null,
+	РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ int not null,
+	РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё varchar(45) not null,
+	CONSTRAINT PK_VipolnenieRabot PRIMARY KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_СЂР°Р±РѕС‚С‹, РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ)
+	);
+
+	-- РЎРѕР·РґР°РЅРёРµ РІРЅРµС€РЅРёС… РєР»СЋС‡РµР№ РґР»СЏ С‚Р°Р±Р»РёС†
+	ALTER TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
+	 ADD CONSTRAINT FK_SodZak_Zakaz FOREIGN KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°) 
+	 REFERENCES [Р—Р°РєР°Р·_РЅР°СЂСЏРґ] (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°)
 	 ON DELETE NO ACTION
 	 ON UPDATE NO ACTION
 
-	ALTER TABLE [Содержимое_заказа]
-	 ADD CONSTRAINT FK_SodZak_Rabota FOREIGN KEY (Код_работы) 
-	 REFERENCES [Работа] (Код_работы)
+	ALTER TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
+	 ADD CONSTRAINT FK_SodZak_Rabota FOREIGN KEY (РљРѕРґ_СЂР°Р±РѕС‚С‹) 
+	 REFERENCES [Р Р°Р±РѕС‚Р°] (РљРѕРґ_СЂР°Р±РѕС‚С‹)
 	 ON DELETE NO ACTION
 	 ON UPDATE NO ACTION
 
-	ALTER TABLE [Выполнение_работ]
-	 ADD CONSTRAINT FK_VipRab_SodZak FOREIGN KEY (Номер_заказа, Код_работы) 
-	 REFERENCES [Содержимое_заказа] (Номер_заказа, Код_работы)
+	ALTER TABLE [Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚]
+	 ADD CONSTRAINT FK_VipRab_SodZak FOREIGN KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_СЂР°Р±РѕС‚С‹) 
+	 REFERENCES [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°] (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_СЂР°Р±РѕС‚С‹)
 	 ON DELETE NO ACTION
 	 ON UPDATE NO ACTION
 
-	ALTER TABLE [Выполнение_работ]
-	 ADD CONSTRAINT FK_VipRab_Ispoln FOREIGN KEY (Код_исполнителя) 
-	 REFERENCES [Исполнитель] (Код_исполнителя)
+	ALTER TABLE [Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚]
+	 ADD CONSTRAINT FK_VipRab_Ispoln FOREIGN KEY (РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ) 
+	 REFERENCES [РСЃРїРѕР»РЅРёС‚РµР»СЊ] (РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ)
 	 ON DELETE NO ACTION
 	 ON UPDATE NO ACTION
 

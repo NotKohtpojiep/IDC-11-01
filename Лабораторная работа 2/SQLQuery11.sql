@@ -1,118 +1,118 @@
-if not exists (select * from sys.databases where name = 'Библиотека')
+п»їif not exists (select * from sys.databases where name = 'Р‘РёР±Р»РёРѕС‚РµРєР°')
 Begin
-	CREATE DATABASE [Библиотека]
+	CREATE DATABASE [Р‘РёР±Р»РёРѕС‚РµРєР°]
 	ON PRIMARY
 	(
 	NAME=lib1,
-	FILENAME='PATH\Лабораторная работа 2\lib1.mdf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 2\lib1.mdf',
 	SIZE=400 MB,
 	MAXSIZE=1500 MB, FILEGROWTH=300 MB
 	),
 	(
 	NAME=lib2,
-	FILENAME='PATH\Лабораторная работа 2\lib2.mdf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 2\lib2.mdf',
 	SIZE=400 MB,
 	MAXSIZE=1500 MB, FILEGROWTH=300 MB
 	)
 	LOG ON
 	(
 	NAME=lib_log,
-	FILENAME='PATH\Лабораторная работа 2\lib_log.ldf',
+	FILENAME='PATH\Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° 2\lib_log.ldf',
 	SIZE=500 MB,
 	MAXSIZE=Unlimited, FILEGROWTH=100 MB
 	)
 End
 Go 
 
-USE [Библиотека]
+USE [Р‘РёР±Р»РёРѕС‚РµРєР°]
 if ((select count(*) from INFORMATION_SCHEMA.Tables) != 7)
 Begin
-	CREATE TABLE [Компоненты]
+	CREATE TABLE [РљРѕРјРїРѕРЅРµРЅС‚С‹]
 	(
-	Код_компонента int primary key,
-	Тип_компонента varchar(20) NOT NULL,
-	Название varchar(30) NOT NULL,
-	Характеристики varchar(250),
-	Стоимость int not null
+	РљРѕРґ_РєРѕРјРїРѕРЅРµРЅС‚Р° int primary key,
+	РўРёРї_РєРѕРјРїРѕРЅРµРЅС‚Р° varchar(20) NOT NULL,
+	РќР°Р·РІР°РЅРёРµ varchar(30) NOT NULL,
+	РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё varchar(250),
+	РЎС‚РѕРёРјРѕСЃС‚СЊ int not null
 	);
 
-	CREATE TABLE [Содержимое_заказа]
+	CREATE TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
 	(
-	Номер_заказа int not null,
-	Код_компонента int not null,
-	Количество int not null
-	CONSTRAINT PK_SodZakaza PRIMARY KEY (Номер_заказа, Код_компонента),
+	РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° int not null,
+	РљРѕРґ_РєРѕРјРїРѕРЅРµРЅС‚Р° int not null,
+	РљРѕР»РёС‡РµСЃС‚РІРѕ int not null
+	CONSTRAINT PK_SodZakaza PRIMARY KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_РєРѕРјРїРѕРЅРµРЅС‚Р°),
 	);
 
-	CREATE TABLE [Сотрудник]
+	CREATE TABLE [РЎРѕС‚СЂСѓРґРЅРёРє]
 	(
-	Код_сотрудника int primary key,
-	Фамилия varchar(30) not null,
-	Имя varchar(30) not null,
-	Отчество varchar(30) not null,
-	Специальность varchar(45) not null,
-	Образование varchar(50) not null,
-	Дата_приема_на_работу date not null,
-	Адрес varchar(100) not null,
-	Телефон bigint not null,
+	РљРѕРґ_СЃРѕС‚СЂСѓРґРЅРёРєР° int primary key,
+	Р¤Р°РјРёР»РёСЏ varchar(30) not null,
+	РРјСЏ varchar(30) not null,
+	РћС‚С‡РµСЃС‚РІРѕ varchar(30) not null,
+	РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ varchar(45) not null,
+	РћР±СЂР°Р·РѕРІР°РЅРёРµ varchar(50) not null,
+	Р”Р°С‚Р°_РїСЂРёРµРјР°_РЅР°_СЂР°Р±РѕС‚Сѓ date not null,
+	РђРґСЂРµСЃ varchar(100) not null,
+	РўРµР»РµС„РѕРЅ bigint not null,
 	);
-	CREATE TABLE [Заказ]
+	CREATE TABLE [Р—Р°РєР°Р·]
 	(
-	Номер_заказа int primary key,
-	Дата_оформления date not null,
-	Время_выполнения time not null,
-	Дата_оплаты date not null,
-	Номер_платежного_документа int not null,
-	Отметка_о_выполнении bit not null,
-	Код_сотрудника int,
-	Код_клиента int
-	);
-
-	CREATE TABLE [Клиент]
-	(
-	Код_клиента int primary key,
-	Фамилия varchar(30) not null,
-	Имя varchar(30) not null,
-	Отчество varchar(30) not null,
-	Паспортные_данные bigint not null,
-	Адрес varchar(100) not null,
-	Телефон bigint not null
+	РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° int primary key,
+	Р”Р°С‚Р°_РѕС„РѕСЂРјР»РµРЅРёСЏ date not null,
+	Р’СЂРµРјСЏ_РІС‹РїРѕР»РЅРµРЅРёСЏ time not null,
+	Р”Р°С‚Р°_РѕРїР»Р°С‚С‹ date not null,
+	РќРѕРјРµСЂ_РїР»Р°С‚РµР¶РЅРѕРіРѕ_РґРѕРєСѓРјРµРЅС‚Р° int not null,
+	РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё bit not null,
+	РљРѕРґ_СЃРѕС‚СЂСѓРґРЅРёРєР° int,
+	РљРѕРґ_РєР»РёРµРЅС‚Р° int
 	);
 
-	CREATE TABLE [Юридическое_лицо]
+	CREATE TABLE [РљР»РёРµРЅС‚]
 	(
-	Код_клиента int primary key,
-	Название_организации varchar(60) not null,
-	Адрес_организации varchar(100) not null,
-	Телефон bigint not null
+	РљРѕРґ_РєР»РёРµРЅС‚Р° int primary key,
+	Р¤Р°РјРёР»РёСЏ varchar(30) not null,
+	РРјСЏ varchar(30) not null,
+	РћС‚С‡РµСЃС‚РІРѕ varchar(30) not null,
+	РџР°СЃРїРѕСЂС‚РЅС‹Рµ_РґР°РЅРЅС‹Рµ bigint not null,
+	РђРґСЂРµСЃ varchar(100) not null,
+	РўРµР»РµС„РѕРЅ bigint not null
 	);
 
-	-- Создание внешних ключей для таблицы Договор
-	ALTER TABLE [Содержимое_заказа]
-	 ADD CONSTRAINT FK_SodZak_Zakaz FOREIGN KEY (Номер_заказа) 
-	 REFERENCES [Заказ] (Номер_заказа)
+	CREATE TABLE [Р®СЂРёРґРёС‡РµСЃРєРѕРµ_Р»РёС†Рѕ]
+	(
+	РљРѕРґ_РєР»РёРµРЅС‚Р° int primary key,
+	РќР°Р·РІР°РЅРёРµ_РѕСЂРіР°РЅРёР·Р°С†РёРё varchar(60) not null,
+	РђРґСЂРµСЃ_РѕСЂРіР°РЅРёР·Р°С†РёРё varchar(100) not null,
+	РўРµР»РµС„РѕРЅ bigint not null
+	);
+
+	-- РЎРѕР·РґР°РЅРёРµ РІРЅРµС€РЅРёС… РєР»СЋС‡РµР№ РґР»СЏ С‚Р°Р±Р»РёС†С‹ Р”РѕРіРѕРІРѕСЂ
+	ALTER TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
+	 ADD CONSTRAINT FK_SodZak_Zakaz FOREIGN KEY (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°) 
+	 REFERENCES [Р—Р°РєР°Р·] (РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°)
 	 ON DELETE NO ACTION
 	 ON UPDATE NO ACTION
-	ALTER TABLE [Содержимое_заказа]
-	 ADD CONSTRAINT FK_SodZak_Komponent FOREIGN KEY (Код_компонента) 
-	 REFERENCES [Компоненты] (Код_компонента)
+	ALTER TABLE [РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р°]
+	 ADD CONSTRAINT FK_SodZak_Komponent FOREIGN KEY (РљРѕРґ_РєРѕРјРїРѕРЅРµРЅС‚Р°) 
+	 REFERENCES [РљРѕРјРїРѕРЅРµРЅС‚С‹] (РљРѕРґ_РєРѕРјРїРѕРЅРµРЅС‚Р°)
 	 ON DELETE CASCADE
 	 ON UPDATE CASCADE
 
-	 ALTER TABLE [Заказ]
-	  ADD CONSTRAINT FK_Zakaz_Sotrudnik FOREIGN KEY (Код_сотрудника) 
-	  REFERENCES [Сотрудник] (Код_сотрудника)
+	 ALTER TABLE [Р—Р°РєР°Р·]
+	  ADD CONSTRAINT FK_Zakaz_Sotrudnik FOREIGN KEY (РљРѕРґ_СЃРѕС‚СЂСѓРґРЅРёРєР°) 
+	  REFERENCES [РЎРѕС‚СЂСѓРґРЅРёРє] (РљРѕРґ_СЃРѕС‚СЂСѓРґРЅРёРєР°)
 	  ON DELETE NO ACTION
 	  ON UPDATE NO ACTION
-	 ALTER TABLE [Заказ]
-	  ADD CONSTRAINT FK_Zakaz_Klient FOREIGN KEY (Код_клиента) 
-	  REFERENCES [Клиент] (Код_клиента)
+	 ALTER TABLE [Р—Р°РєР°Р·]
+	  ADD CONSTRAINT FK_Zakaz_Klient FOREIGN KEY (РљРѕРґ_РєР»РёРµРЅС‚Р°) 
+	  REFERENCES [РљР»РёРµРЅС‚] (РљРѕРґ_РєР»РёРµРЅС‚Р°)
 	  ON DELETE NO ACTION
 	  ON UPDATE NO ACTION
 
-	 ALTER TABLE [Юридическое_лицо]
-	  ADD CONSTRAINT FK_Zakaz_UrLitso FOREIGN KEY (Код_клиента) 
-	  REFERENCES [Клиент] (Код_клиента)
+	 ALTER TABLE [Р®СЂРёРґРёС‡РµСЃРєРѕРµ_Р»РёС†Рѕ]
+	  ADD CONSTRAINT FK_Zakaz_UrLitso FOREIGN KEY (РљРѕРґ_РєР»РёРµРЅС‚Р°) 
+	  REFERENCES [РљР»РёРµРЅС‚] (РљРѕРґ_РєР»РёРµРЅС‚Р°)
 	  ON DELETE NO ACTION
 	  ON UPDATE NO ACTION
 end

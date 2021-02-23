@@ -1,5 +1,5 @@
-Declare @words nvarchar(299)
-Set @words = 'ß ÀÎÂËÀÎÂÛËÎÂÀ ÀËÎÂÛËÀÎÛÂË'
+ï»¿Declare @words nvarchar(299)
+Set @words = 'Ğ¯ ĞĞĞ’Ğ›ĞĞĞ’Ğ«Ğ›ĞĞ’Ğ ĞĞ›ĞĞ’Ğ«Ğ›ĞĞĞ«Ğ’Ğ›'
 
 Select count(*) from STRING_SPLIT(@words, ' ')
 
@@ -20,5 +20,5 @@ print @z
 
 
 Declare @chaa nvarchar(299)
-Set @chaa = 'ß ÀÎÂËÀÎÂÛËÎÂÀ ÀËÎÂÛËÀÎÛÂË 2002'
+Set @chaa = 'Ğ¯ ĞĞĞ’Ğ›ĞĞĞ’Ğ«Ğ›ĞĞ’Ğ ĞĞ›ĞĞ’Ğ«Ğ›ĞĞĞ«Ğ’Ğ› 2002'
 Select count(*) from STRING_SPLIT(@chaa, ' ')

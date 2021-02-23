@@ -1,30 +1,30 @@
-/*
-8 вариант
+п»ї/*
+8 РІР°СЂРёР°РЅС‚
 ...
 ...
 ...
 */
 -- use [YourDatabaseName] EXEC sp_changedbowner 'sa'
--- надоело эту команду использовать .-.
+-- РЅР°РґРѕРµР»Рѕ СЌС‚Сѓ РєРѕРјР°РЅРґСѓ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ .-.
 
-use Библиотека
+use Р‘РёР±Р»РёРѕС‚РµРєР°
 
 BEGIN TRAN
-	DECLARE @mark VARCHAR(50) -- отметка работы
-	DECLARE @num_zakaz int -- номер заказа
-	DECLARE @work_code int -- код работы
-	DECLARE @worker_code int -- код исполнителя
+	DECLARE @mark VARCHAR(50) -- РѕС‚РјРµС‚РєР° СЂР°Р±РѕС‚С‹
+	DECLARE @num_zakaz int -- РЅРѕРјРµСЂ Р·Р°РєР°Р·Р°
+	DECLARE @work_code int -- РєРѕРґ СЂР°Р±РѕС‚С‹
+	DECLARE @worker_code int -- РєРѕРґ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
 
 	DECLARE @result_table TABLE(
-		Номер_заказа INT NOT NULL,  
-		Код_работы INT NOT NULL,  
-		Отметка NVARCHAR(60) NOT NULL)
+		РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° INT NOT NULL,  
+		РљРѕРґ_СЂР°Р±РѕС‚С‹ INT NOT NULL,  
+		РћС‚РјРµС‚РєР° NVARCHAR(60) NOT NULL)
 
-	-- Я объявил курсорррррр!
+	-- РЇ РѕР±СЉСЏРІРёР» РєСѓСЂСЃРѕСЂСЂСЂСЂСЂСЂ!
 	DECLARE db_cursor CURSOR FOR 
-		(SELECT Номер_заказа, Код_работы, Код_исполнителя, Отметка_о_выполнении from Выполнение_работ)
+		(SELECT РќРѕРјРµСЂ_Р·Р°РєР°Р·Р°, РљРѕРґ_СЂР°Р±РѕС‚С‹, РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ, РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё from Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚)
 
-	-- Открываем курсор
+	-- РћС‚РєСЂС‹РІР°РµРј РєСѓСЂСЃРѕСЂ
 	OPEN db_cursor  
 	FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
 
@@ -32,43 +32,43 @@ BEGIN TRAN
 	BEGIN
 		SELECT @mark = LOWER(@mark)	
 
-		-- Проверка записи с пометкой "Не выполнено"
-		IF (@mark = 'не выполнено')
+		-- РџСЂРѕРІРµСЂРєР° Р·Р°РїРёСЃРё СЃ РїРѕРјРµС‚РєРѕР№ "РќРµ РІС‹РїРѕР»РЅРµРЅРѕ"
+		IF (@mark = 'РЅРµ РІС‹РїРѕР»РЅРµРЅРѕ')
 		BEGIN
-			-- Проверяем, возможно ли сгенерировать номер заказа, у которого нет такого исполнителя
-			IF NOT EXISTS(SELECT DISTINCT Номер_заказа FROM Выполнение_работ 
-				WHERE Номер_заказа NOT IN (SELECT Номер_заказа FROM Выполнение_работ WHERE Код_исполнителя = @worker_code))
+			-- РџСЂРѕРІРµСЂСЏРµРј, РІРѕР·РјРѕР¶РЅРѕ Р»Рё СЃРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ РЅРѕРјРµСЂ Р·Р°РєР°Р·Р°, Сѓ РєРѕС‚РѕСЂРѕРіРѕ РЅРµС‚ С‚Р°РєРѕРіРѕ РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+			IF NOT EXISTS(SELECT DISTINCT РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ 
+				WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° NOT IN (SELECT РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ = @worker_code))
 			BEGIN
-				PRINT('Невозможно расформировать заказ: ' + CAST(@num_zakaz as nvarchar) + ' с кодом рабочего: ' + CAST(@worker_code as nvarchar))
+				PRINT('РќРµРІРѕР·РјРѕР¶РЅРѕ СЂР°СЃС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Р·Р°РєР°Р·: ' + CAST(@num_zakaz as nvarchar) + ' СЃ РєРѕРґРѕРј СЂР°Р±РѕС‡РµРіРѕ: ' + CAST(@worker_code as nvarchar))
 				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
 				CONTINUE
 			END
-			-- Действия с расформированием
-			IF (NOT EXISTS(SELECT * FROM Выполнение_работ WHERE Номер_заказа = @num_zakaz and LOWER(Отметка_о_выполнении) != 'не выполнено'))
+			-- Р”РµР№СЃС‚РІРёСЏ СЃ СЂР°СЃС„РѕСЂРјРёСЂРѕРІР°РЅРёРµРј
+			IF (NOT EXISTS(SELECT * FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz and LOWER(РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё) != 'РЅРµ РІС‹РїРѕР»РЅРµРЅРѕ'))
 			BEGIN
-				DECLARE @rand_num INT = (SELECT TOP 1 Номер_заказа 
-										FROM Выполнение_работ 
-										WHERE Номер_заказа NOT IN (SELECT Номер_заказа FROM Выполнение_работ WHERE Код_исполнителя = @worker_code) 
-											AND LOWER(Отметка_о_выполнении) != 'не выполнено' 
+				DECLARE @rand_num INT = (SELECT TOP 1 РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° 
+										FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ 
+										WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° NOT IN (SELECT РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ = @worker_code) 
+											AND LOWER(РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё) != 'РЅРµ РІС‹РїРѕР»РЅРµРЅРѕ' 
 										ORDER BY NEWID())
-				-- Создаем новую запись, если таковой нет, чтобы разместить расформированный заказ
-				IF (NOT EXISTS(SELECT * FROM Содержимое_заказа WHERE Номер_заказа = @rand_num AND Код_работы = @work_code))
+				-- РЎРѕР·РґР°РµРј РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ, РµСЃР»Рё С‚Р°РєРѕРІРѕР№ РЅРµС‚, С‡С‚РѕР±С‹ СЂР°Р·РјРµСЃС‚РёС‚СЊ СЂР°СЃС„РѕСЂРјРёСЂРѕРІР°РЅРЅС‹Р№ Р·Р°РєР°Р·
+				IF (NOT EXISTS(SELECT * FROM РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р° WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @rand_num AND РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code))
 				BEGIN
-					INSERT INTO Содержимое_заказа VALUES (@rand_num, @work_code)
+					INSERT INTO РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р° VALUES (@rand_num, @work_code)
 				END
-				UPDATE Выполнение_работ 
-				SET Отметка_о_выполнении = 'Расформирован', 
-						Номер_заказа = @rand_num
-				WHERE Номер_заказа = @num_zakaz and Код_работы = @work_code and Код_исполнителя = @worker_code
-				-- Удаляем запись, если на нее никто не ссылается
-				IF (NOT EXISTS(SELECT * FROM Выполнение_работ WHERE Номер_заказа = @num_zakaz AND Код_работы = @work_code))
+				UPDATE Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ 
+				SET РћС‚РјРµС‚РєР°_Рѕ_РІС‹РїРѕР»РЅРµРЅРёРё = 'Р Р°СЃС„РѕСЂРјРёСЂРѕРІР°РЅ', 
+						РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @rand_num
+				WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz and РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code and РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ = @worker_code
+				-- РЈРґР°Р»СЏРµРј Р·Р°РїРёСЃСЊ, РµСЃР»Рё РЅР° РЅРµРµ РЅРёРєС‚Рѕ РЅРµ СЃСЃС‹Р»Р°РµС‚СЃСЏ
+				IF (NOT EXISTS(SELECT * FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz AND РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code))
 				BEGIN
-					DELETE Содержимое_заказа WHERE Номер_заказа = @num_zakaz AND Код_работы = @work_code
+					DELETE РЎРѕРґРµСЂР¶РёРјРѕРµ_Р·Р°РєР°Р·Р° WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz AND РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code
 				END
 				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
 				CONTINUE
 			END
-			-- Покидаем зону извержения если есть заказы с другими статусами
+			-- РџРѕРєРёРґР°РµРј Р·РѕРЅСѓ РёР·РІРµСЂР¶РµРЅРёСЏ РµСЃР»Рё РµСЃС‚СЊ Р·Р°РєР°Р·С‹ СЃ РґСЂСѓРіРёРјРё СЃС‚Р°С‚СѓСЃР°РјРё
 			ELSE
 			BEGIN
 				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
@@ -77,31 +77,14 @@ BEGIN TRAN
 		END
 
 
-		IF (@mark = 'перерасход')
+		IF (@mark = 'РїРµСЂРµСЂР°СЃС…РѕРґ')
 		BEGIN
-			-- Стоимость выполняемой работы превышает стоимость сделки. Такие вещи мы покрываем малым респектом
-			IF ((SELECT SUM(Стоимость_работы) 
-				 FROM Работа INNER JOIN Выполнение_работ on Работа.Код_работы = Выполнение_работ.Код_работы
-				 WHERE Номер_заказа = @num_zakaz) > (SELECT Полная_стоимость FROM Заказ_наряд WHERE Номер_заказа = @num_zakaz))
+			-- РЎС‚РѕРёРјРѕСЃС‚СЊ РІС‹РїРѕР»РЅСЏРµРјРѕР№ СЂР°Р±РѕС‚С‹ РїСЂРµРІС‹С€Р°РµС‚ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃРґРµР»РєРё. РўР°РєРёРµ РІРµС‰Рё РјС‹ РїРѕРєСЂС‹РІР°РµРј РјР°Р»С‹Рј СЂРµСЃРїРµРєС‚РѕРј
+			IF ((SELECT SUM(РЎС‚РѕРёРјРѕСЃС‚СЊ_СЂР°Р±РѕС‚С‹) 
+				 FROM Р Р°Р±РѕС‚Р° INNER JOIN Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ on Р Р°Р±РѕС‚Р°.РљРѕРґ_СЂР°Р±РѕС‚С‹ = Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚.РљРѕРґ_СЂР°Р±РѕС‚С‹
+				 WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz) > (SELECT РџРѕР»РЅР°СЏ_СЃС‚РѕРёРјРѕСЃС‚СЊ FROM Р—Р°РєР°Р·_РЅР°СЂСЏРґ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz))
 			BEGIN
-				INSERT INTO @result_table SELECT @num_zakaz, Код_работы, 'Перерасход' FROM Выполнение_работ WHERE Номер_заказа = @num_zakaz
-
-				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
-				CONTINUE
-			END
-			ELSE
-			BEGIN
-				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
-				CONTINUE
-			END
-		END
-
-		-- доделоц
-		IF (@mark = 'возврат средств')
-		BEGIN
-			IF EXISTS(SELECT * FROM Заказ_наряд WHERE Номер_заказа = @num_zakaz AND Дата_выполнения IS NULL)
-			BEGIN
-				INSERT INTO @result_table SELECT @num_zakaz, Код_работы, 'Возврат средств' FROM Выполнение_работ WHERE Номер_заказа = @num_zakaz
+				INSERT INTO @result_table SELECT @num_zakaz, РљРѕРґ_СЂР°Р±РѕС‚С‹, 'РџРµСЂРµСЂР°СЃС…РѕРґ' FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz
 
 				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
 				CONTINUE
@@ -113,13 +96,30 @@ BEGIN TRAN
 			END
 		END
 
-		IF (@mark = 'возможный долг')
+		-- РґРѕРґРµР»РѕС†
+		IF (@mark = 'РІРѕР·РІСЂР°С‚ СЃСЂРµРґСЃС‚РІ')
 		BEGIN
-			IF ((SELECT SUM(Зарплата) 
-				FROM Выполнение_работ INNER JOIN Исполнитель ON Выполнение_работ.Код_исполнителя = Исполнитель.Код_исполнителя
-				WHERE Номер_заказа = @num_zakaz AND Код_работы = @work_code) > (SELECT Стоимость_работы / 2 FROM Работа WHERE Код_работы = @work_code))
+			IF EXISTS(SELECT * FROM Р—Р°РєР°Р·_РЅР°СЂСЏРґ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz AND Р”Р°С‚Р°_РІС‹РїРѕР»РЅРµРЅРёСЏ IS NULL)
 			BEGIN
-				INSERT INTO @result_table SELECT @num_zakaz, Код_работы, 'Возможный долг' FROM Выполнение_работ WHERE Номер_заказа = @num_zakaz
+				INSERT INTO @result_table SELECT @num_zakaz, РљРѕРґ_СЂР°Р±РѕС‚С‹, 'Р’РѕР·РІСЂР°С‚ СЃСЂРµРґСЃС‚РІ' FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz
+
+				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
+				CONTINUE
+			END
+			ELSE
+			BEGIN
+				FETCH NEXT FROM db_cursor INTO @num_zakaz, @work_code, @worker_code, @mark
+				CONTINUE
+			END
+		END
+
+		IF (@mark = 'РІРѕР·РјРѕР¶РЅС‹Р№ РґРѕР»Рі')
+		BEGIN
+			IF ((SELECT SUM(Р—Р°СЂРїР»Р°С‚Р°) 
+				FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ INNER JOIN РСЃРїРѕР»РЅРёС‚РµР»СЊ ON Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚.РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ = РСЃРїРѕР»РЅРёС‚РµР»СЊ.РљРѕРґ_РёСЃРїРѕР»РЅРёС‚РµР»СЏ
+				WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz AND РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code) > (SELECT РЎС‚РѕРёРјРѕСЃС‚СЊ_СЂР°Р±РѕС‚С‹ / 2 FROM Р Р°Р±РѕС‚Р° WHERE РљРѕРґ_СЂР°Р±РѕС‚С‹ = @work_code))
+			BEGIN
+				INSERT INTO @result_table SELECT @num_zakaz, РљРѕРґ_СЂР°Р±РѕС‚С‹, 'Р’РѕР·РјРѕР¶РЅС‹Р№ РґРѕР»Рі' FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚ WHERE РќРѕРјРµСЂ_Р·Р°РєР°Р·Р° = @num_zakaz
 			END
 			ELSE
 			BEGIN
@@ -134,8 +134,8 @@ BEGIN TRAN
 	CLOSE db_cursor  
 
 	DEALLOCATE db_cursor
-	SELECT DISTINCT * FROM @result_table ORDER BY Отметка
-	SELECT * FROM Выполнение_работ
+	SELECT DISTINCT * FROM @result_table ORDER BY РћС‚РјРµС‚РєР°
+	SELECT * FROM Р’С‹РїРѕР»РЅРµРЅРёРµ_СЂР°Р±РѕС‚
 ROLLBACK
 
 go
